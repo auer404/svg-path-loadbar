@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        body {
+            margin:0;
+            background:#981914;
+        }
+
+        input[type=range] {
+            position:absolute; z-index:99;
+        }
+
+        #logo_container {
+            position:absolute; top:50%; left:50%;
+            transform:translate(-50%,-50%);
+            height:100vh;
+            width:100%;
+            display:flex;
+            justify-content:center;
+        }
+
+        #logo_container.complete {
+            width:60px; height:50px;
+            left:45px;
+            transition:width 0.75s, height 0.75s, left 0.75s 0.75s;
+        }
+
+        svg {
+            max-width:100%;
+            max-height:100%;
+            vertical-align:middle;
+            /* border:1px dotted gray;
+            box-sizing:border-box; */
+        }
+        
+        #logo-path {
+            fill:none;
+            stroke:#FFFFFF;
+            stroke-width:93;
+            stroke-linecap:square;
+            stroke-miterlimit:10;
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <input type="range" min="0" max="100" value="0">
+
+    <div id="logo_container">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1366 1142" xml:space="preserve">
+
+            <polyline id="logo-path" points="0.1,246.7 596.2,347.5 1320.2,68 1319.6,254.3 596.2,533.8 46,440.6 46,626.9 596.2,720.1 1320.2,440.6 1319.6,626.9 596.2,906.4 46,813.2 46,999.5 596.2,1092.7 1366.1,795.4 "/>
+        </svg>
+    </div>
+
+<script>
+
+// https://jakearchibald.com/2013/animated-line-drawing-svg/
+
+var path = document.querySelector('#logo-path');
+var length = path.getTotalLength();
+
+// Set up the starting positions
+path.style.strokeDasharray = length + ' ' + length;
+path.style.strokeDashoffset = length;
+
+// Trigger a layout so styles are calculated & the browser
+// picks up the starting position before animating
+//path.getBoundingClientRect();
+// Define our transition
+//path.style.transition = path.style.WebkitTransition = 'stroke-dashoffset 0.25s';
+
+document.querySelector("input[type=range]").oninput = function(){
+    let dashoffset = (100 - this.value) * length / 100;
+    path.style.strokeDashoffset = dashoffset;
+    if (this.value == 100) {
+        setTimeout(function(){
+            document.querySelector("#logo_container").classList.add("complete");
+        },250);
+    } else {
+        document.querySelector("#logo_container").classList.remove("complete");
+    }
+}
+
+</script>
+    
+</body>
+</html>
